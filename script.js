@@ -1,68 +1,59 @@
-function convertAudio() {
-    let fileInput = document.getElementById("audioFile");
-    let loadingText = document.getElementById("loadingText");
-    let outputText = document.getElementById("outputText");
-    let copyBtn = document.getElementById("copyBtn");
-    let downloadBtn = document.getElementById("downloadBtn");
+async function convertAudio() {
+    const file = document.getElementById("audioFile").files[0];
+    const loadingText = document.getElementById("loadingText");
+    const outputText = document.getElementById("outputText");
+    const copyBtn = document.getElementById("copyBtn");
+    const downloadBtn = document.getElementById("downloadBtn");
 
-    if (fileInput.files.length === 0) {
-        alert("Please select an audio file first!");
+    if (!file) {
+        alert("Please select an audio file!");
         return;
     }
 
-    let file = fileInput.files[0];
-
-    // إظهار التحميل
     loadingText.style.display = "block";
     outputText.value = "";
-    copyBtn.style.display = "none";
-    downloadBtn.style.display = "none";
 
-    // استخدام مكتبة Web Speech API لتحويل الصوت لنص
-    let reader = new FileReader();
-    reader.onload = function (event) {
-        let audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        audioContext.decodeAudioData(event.target.result, function (buffer) {
-            let recognizer = new webkitSpeechRecognition();
-            recognizer.lang = "en-US";
-            recognizer.continuous = false;
-            recognizer.interimResults = false;
+    const formData = new FormData();
+    formData.append("audio", file);
 
-            recognizer.onresult = function (event) {
-                let text = event.results[0][0].transcript;
-                outputText.value = text;
-                copyBtn.style.display = "block";
-                downloadBtn.style.display = "block";
-                loadingText.style.display = "none";
-            };
-
-            recognizer.onerror = function () {
-                alert("Error converting audio to text. Try again!");
-                loadingText.style.display = "none";
-            };
-
-            recognizer.start();
+    try {
+        const response = await fetch("https://api.assemblyai.com/v2/transcript", {
+            method: "POST",
+            headers: {
+                "Authorization": "YOUR_API_KEY"
+            },
+            body: formData
         });
-    };
-    reader.readAsArrayBuffer(file);
+
+        const data = await response.json();
+        loadingText.style.display = "none";
+
+        if (data.text) {
+            outputText.value = data.text;
+            copyBtn.style.display = "block";
+            downloadBtn.style.display = "block";
+        } else {
+            alert("Error converting audio!");
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Something went wrong!");
+        loadingText.style.display = "none";
+    }
 }
 
-// زر النسخ
 function copyText() {
-    let textArea = document.getElementById("outputText");
-    textArea.select();
+    const text = document.getElementById("outputText");
+    text.select();
     document.execCommand("copy");
     alert("Text copied!");
 }
 
-// زر التحميل كملف Word
 function downloadWord() {
-    let text = document.getElementById("outputText").value;
-    let blob = new Blob(["\ufeff" + text], { type: "application/msword" });
-    let link = document.createElement("a");
+    const text = document.getElementById("outputText").value;
+    const blob = new Blob(["\ufeff" + text], { type: "application/msword" });
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "Lecture.doc";
-    document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
 }
