@@ -1,69 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;700&display=swap');
+
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Pacifico', cursive;
     text-align: center;
-    background-color: #121212;
+    background-color: #000;
     color: white;
     margin: 0;
     padding: 0;
+    overflow: hidden;
+    position: relative;
 }
 
+/* تأثير الإنارة الذهبية */
+.glow {
+    color: gold;
+    text-shadow: 0 0 20px gold, 0 0 40px orange, 0 0 60px yellow;
+    animation: flicker 2s infinite alternate;
+}
+
+@keyframes flicker {
+    0% { text-shadow: 0 0 15px gold, 0 0 30px orange; }
+    100% { text-shadow: 0 0 25px gold, 0 0 50px yellow; }
+}
+
+/* تأثير الحواف المضيئة */
 .container {
     margin-top: 50px;
     padding: 20px;
-    background: #1e1e1e;
-    border-radius: 10px;
+    background: rgba(30, 30, 30, 0.9);
+    border-radius: 15px;
     display: inline-block;
-    box-shadow: 0 0 20px gold;
-    animation: glow 2s infinite alternate;
+    box-shadow: 0 0 30px gold, 0 0 50px blue;
+    animation: pulseGlow 2s infinite alternate;
 }
 
-@keyframes glow {
-    from {
-        box-shadow: 0 0 10px gold;
-    }
-    to {
-        box-shadow: 0 0 20px gold;
-    }
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 20px gold, 0 0 30px blue; }
+    100% { box-shadow: 0 0 40px gold, 0 0 60px blue; }
 }
 
-h1.glow {
-    color: gold;
-    text-shadow: 0 0 10px gold, 0 0 20px yellow;
-}
-
+/* زر التشغيل بتأثير نيون */
 button {
-    background: gold;
+    background: linear-gradient(90deg, gold, orange);
     border: none;
     padding: 12px 25px;
     cursor: pointer;
-    font-size: 18px;
-    color: black;
+    font-size: 20px;
+    font-family: 'Poppins', sans-serif;
     font-weight: bold;
-    border-radius: 5px;
+    color: black;
+    border-radius: 10px;
     transition: 0.3s;
+    box-shadow: 0 0 10px gold, 0 0 20px yellow;
 }
 
 button:hover {
-    background: orange;
-    box-shadow: 0 0 10px gold;
+    background: linear-gradient(90deg, orange, gold);
+    box-shadow: 0 0 20px gold, 0 0 30px yellow;
+    transform: scale(1.05);
 }
 
+/* تأثير تحميل متحرك */
 .loading {
     display: none;
     color: gold;
-    font-size: 18px;
+    font-size: 20px;
     margin-top: 15px;
-    animation: blink 1s infinite;
+    animation: blink 1s infinite alternate;
 }
 
 @keyframes blink {
-    50% { opacity: 0.5; }
+    0% { opacity: 1; }
+    100% { opacity: 0.5; }
 }
 
+/* تأثير النص المحول */
 #outputText {
     margin-top: 20px;
-    padding: 10px;
-    background: #333;
-    border-radius: 5px;
-    box-shadow: 0 0 5px gold;
+    padding: 15px;
+    background: rgba(50, 50, 50, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 0 15px gold, 0 0 25px blue;
+    font-size: 18px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* حقوق النشر */
+footer {
+    text-align: center;
+    padding: 15px;
+    font-size: 16px;
+    color: gold;
+    text-shadow: 0 0 10px gold, 0 0 20px blue;
 }
