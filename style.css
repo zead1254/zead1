@@ -11,13 +11,13 @@ body {
     position: relative;
 }
 
-/* تأثير الخلفية المتحركة */
+/* خلفية متحركة بإضاءة ذهبية */
 body::before {
     content: "";
     position: absolute;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, rgba(0,0,0,1) 80%);
+    background: radial-gradient(circle, rgba(255,215,0,0.4) 10%, rgba(0,0,0,1) 90%);
     animation: bgMove 6s infinite alternate;
     z-index: -1;
 }
@@ -27,35 +27,22 @@ body::before {
     100% { transform: translateY(10px); opacity: 1; }
 }
 
-/* تأثير الإنارة الذهبية */
+/* النص المضيء */
 .glow {
     color: gold;
     text-shadow: 0 0 20px gold, 0 0 40px orange, 0 0 60px yellow;
-    animation: flicker 2s infinite alternate;
 }
 
-@keyframes flicker {
-    0% { text-shadow: 0 0 15px gold, 0 0 30px orange; }
-    100% { text-shadow: 0 0 25px gold, 0 0 50px yellow; }
-}
-
-/* تأثير الحواف المضيئة */
+/* الحاوية */
 .container {
     margin-top: 50px;
     padding: 20px;
     background: rgba(30, 30, 30, 0.9);
     border-radius: 15px;
-    display: inline-block;
-    box-shadow: 0 0 30px gold, 0 0 50px blue;
-    animation: pulseGlow 2s infinite alternate;
+    box-shadow: 0 0 30px gold, 0 0 50px gold;
 }
 
-@keyframes pulseGlow {
-    0% { box-shadow: 0 0 20px gold, 0 0 30px blue; }
-    100% { box-shadow: 0 0 40px gold, 0 0 60px blue; }
-}
-
-/* زر التشغيل بتأثير نيون */
+/* الأزرار */
 button {
     background: linear-gradient(90deg, gold, orange);
     border: none;
@@ -76,7 +63,7 @@ button:hover {
     transform: scale(1.05);
 }
 
-/* تأثير تحميل متحرك */
+/* تأثير التحميل */
 .loading {
     display: none;
     color: gold;
@@ -90,37 +77,22 @@ button:hover {
     100% { opacity: 0.5; }
 }
 
-/* تأثير النص المحول */
-#outputText {
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(50, 50, 50, 0.9);
-    border-radius: 10px;
-    box-shadow: 0 0 15px gold, 0 0 25px blue;
-    font-size: 18px;
-}
-
-/* تأثير الأسنان (إضافة خلفية شفافة خفيفة تشبه الأسنان) */
-.container::after {
-    content: "🦷";
-    font-size: 100px;
-    position: absolute;
-    top: 5%;
-    right: 10%;
-    opacity: 0.1;
-    animation: teethGlow 3s infinite alternate;
-}
-
-@keyframes teethGlow {
-    0% { opacity: 0.1; transform: scale(1); }
-    100% { opacity: 0.3; transform: scale(1.1); }
-}
-
-/* حقوق النشر */
-footer {
-    text-align: center;
-    padding: 15px;
-    font-size: 16px;
+/* صندوق النص */
+textarea {
+    width: 80%;
+    height: 150px;
+    background: rgba(20, 20, 20, 0.8);
     color: gold;
-    text-shadow: 0 0 10px gold, 0 0 20px blue;
+    border: 2px solid gold;
+    padding: 10px;
+    font-size: 18px;
+    font-family: 'Shadows Into Light', cursive;
+    margin-top: 20px;
+    resize: none;
+    text-align: center;
+}
+
+/* الأزرار الخاصة بالنص */
+.buttons {
+    margin-top: 20px;
 }

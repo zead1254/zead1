@@ -1,73 +1,67 @@
-async function convertAudio() {
-    const fileInput = document.getElementById("audioInput");
-    const outputText = document.getElementById("outputText");
-    const loading = document.getElementById("loading");
-    const downloadBtn = document.getElementById("downloadBtn");
+function convertAudio() {
+    let fileInput = document.getElementById("audioFile");
+    let loadingText = document.getElementById("loadingText");
+    let outputText = document.getElementById("outputText");
+    let copyBtn = document.getElementById("copyBtn");
+    let downloadBtn = document.getElementById("downloadBtn");
 
-    if (!fileInput.files.length) {
-        alert("يرجى اختيار ملف صوتي!");
+    if (fileInput.files.length === 0) {
+        alert("Please select an audio file first!");
         return;
     }
 
-    loading.style.display = "block";
-    outputText.innerText = "جاري المعالجة...";
+    let file = fileInput.files[0];
+
+    // إظهار التحميل
+    loadingText.style.display = "block";
+    outputText.value = "";
+    copyBtn.style.display = "none";
     downloadBtn.style.display = "none";
 
-    const formData = new FormData();
-    formData.append("file", fileInput.files[0]);
-    formData.append("model", "whisper-1");
+    // استخدام مكتبة Web Speech API لتحويل الصوت لنص
+    let reader = new FileReader();
+    reader.onload = function (event) {
+        let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        audioContext.decodeAudioData(event.target.result, function (buffer) {
+            let recognizer = new webkitSpeechRecognition();
+            recognizer.lang = "en-US";
+            recognizer.continuous = false;
+            recognizer.interimResults = false;
 
-    try {
-        const response = await fetch("https://api.openai.com/v1/audio/transcriptions", {
-            method: "POST",
-            headers: {
-                "Authorization": "Bearer YOUR_OPENAI_API_KEY",
-            },
-            body: formData
+            recognizer.onresult = function (event) {
+                let text = event.results[0][0].transcript;
+                outputText.value = text;
+                copyBtn.style.display = "block";
+                downloadBtn.style.display = "block";
+                loadingText.style.display = "none";
+            };
+
+            recognizer.onerror = function () {
+                alert("Error converting audio to text. Try again!");
+                loadingText.style.display = "none";
+            };
+
+            recognizer.start();
         });
-
-        const data = await response.json();
-        console.log("Response from API:", data);
-
-        let text = data.text || "لم يتم التعرف على النص.";
-        text = formatText(text);
-
-        outputText.innerText = text;
-        downloadBtn.style.display = "block";
-    } catch (error) {
-        console.error("Error:", error);
-        outputText.innerText = "حدث خطأ أثناء التحويل!";
-    }
-
-    loading.style.display = "none";
+    };
+    reader.readAsArrayBuffer(file);
 }
 
-function formatText(text) {
-    const fillerWords = ["يعني", "اممم", "آه", "اه", "تمام", "مثلا", "يعني هو", "طيب"];
-    fillerWords.forEach(word => {
-        const regex = new RegExp("\\b" + word + "\\b", "gi");
-        text = text.replace(regex, "");
-    });
-
-    text = text.replace(/\.\s+/g, ".\n");
-    text = text.replace(/،\s+/g, "،\n");
-
-    return text.trim();
+// زر النسخ
+function copyText() {
+    let textArea = document.getElementById("outputText");
+    textArea.select();
+    document.execCommand("copy");
+    alert("Text copied!");
 }
 
-// إنشاء ملف وورد وتحميله
-function downloadAsWord() {
-    const text = document.getElementById("outputText").innerText;
-    if (!text || text === "جاري المعالجة..." || text === "لم يتم التعرف على النص.") {
-        alert("لا يوجد نص لتحميله!");
-        return;
-    }
-
-    const blob = new Blob(['\ufeff' + text], { type: "application/msword" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "المحاضرة.doc";
+// زر التحميل كملف Word
+function downloadWord() {
+    let text = document.getElementById("outputText").value;
+    let blob = new Blob(["\ufeff" + text], { type: "application/msword" });
+    let link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "Lecture.doc";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

@@ -1,24 +1,28 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Boss - تحويل الصوت إلى نص</title>
+    <title>The Boss - Audio to Text</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <h1 class="glow">The Boss - Audio to Text Converter</h1>
+    
     <div class="container">
-        <h1 class="glow">🎤 The Boss - تحويل الصوت إلى نص</h1>
-        <input type="file" id="audioInput" accept="audio/*">
-        <button onclick="convertAudio()">تحويل الصوت</button>
-        <div class="loading" id="loading">جاري التحويل...</div>
-        <p id="outputText">النص المحول سيظهر هنا...</p>
-        <button id="downloadBtn" onclick="downloadAsWord()" style="display: none;">📥 تنزيل المحاضرة كملف Word</button>
+        <input type="file" id="audioFile" accept="audio/*">
+        <button onclick="convertAudio()">Upload & Convert</button>
+        <p class="loading" id="loadingText">Converting... Please wait</p>
+        <textarea id="outputText" readonly></textarea>
+        
+        <div class="buttons">
+            <button id="copyBtn" onclick="copyText()" style="display:none;">Copy</button>
+            <button id="downloadBtn" onclick="downloadWord()" style="display:none;">Download as Word</button>
+        </div>
     </div>
 
-    <footer>
-        <p>All rights reserved to Dr. Zead Elsayed</p>
-    </footer>
+    <footer>All rights reserved to Dr. Zead Elsayed
+ولاتنسونى من صالح دعائكم</footer>
 
     <script src="script.js"></script>
 </body>
